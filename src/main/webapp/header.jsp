@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,6 +19,8 @@
 		</ol>
 	</div>
 </div>
+
+<c:set var="path" scope="session" value="${pageContext.request.contextPath}"></c:set>
 
 <!-- 导航条 -->
 <div class="container-fluid">

@@ -22,7 +22,6 @@ public class DataSourceUtils {
 
 	// 获取连接对象
 	public static Connection getConnection() throws SQLException {
-
 		Connection con = tl.get();
 		if (con == null) {
 			con = dataSource.getConnection();
@@ -62,18 +61,7 @@ public class DataSourceUtils {
 		Connection con = getConnection();
 		if (con != null) {
 			con.close();
-		}
-	}
-
-	public static void closeStatement(Statement st) throws SQLException {
-		if (st != null) {
-			st.close();
-		}
-	}
-
-	public static void closeResultSet(ResultSet rs) throws SQLException {
-		if (rs != null) {
-			rs.close();
+			tl.remove();// 从线程绑定中移除
 		}
 	}
 
