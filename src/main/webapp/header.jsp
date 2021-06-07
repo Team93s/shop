@@ -16,6 +16,7 @@
 			<li><a href="register.jsp">注册</a></li>
 			<li><a href="cart.jsp">购物车</a></li>
 			<li><a href="order_list.jsp">我的订单</a></li>
+			<li><a href="">联系客服</a></li>
 		</ol>
 	</div>
 </div>
@@ -38,12 +39,7 @@
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li class="active"><a href="product_list.htm">手机数码<span class="sr-only">(current)</span></a></li>
-					<li><a href="#">电脑办公</a></li>
-					<li><a href="#">电脑办公</a></li>
-					<li><a href="#">电脑办公</a></li>
-				</ul>
+				<ul class="nav navbar-nav" id="categories"></ul>
 				<form class="navbar-form navbar-right" role="search">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search">
@@ -53,4 +49,21 @@
 			</div>
 		</div>
 	</nav>
+
+	<script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+	<script>
+		//查询所有商品分类，并显示在列表中
+		$.ajax({
+			type:"get",
+			url:"${path}/category?method=findAllCategories",
+			dataType:"json",
+			success:function(list){   //list是json数据串
+				for (var i in list) { //i 下标
+					console.log(list[i].cid+" : "+list[i].cname)
+					var $li = "<li><a href='${path}/product?method=findProducts&cid="+list[i].cid+"'>"+list[i].cname+"</a></li>";
+					$("#categories").append($li);
+				}
+			}
+		})
+	</script>
 </div>
