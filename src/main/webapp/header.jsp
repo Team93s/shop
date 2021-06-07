@@ -35,14 +35,14 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">首页</a>
+				<a class="navbar-brand" href="${path}/product?method=index">首页</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav" id="categories"></ul>
-				<form class="navbar-form navbar-right" role="search">
+				<form class="navbar-form navbar-right" role="search" action="${path}/product?method=findProducts&cid=${vo.query1}" method="post">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" placeholder="Search" id="pname" name="pname" value="${vo.query2}">
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
 				</form>

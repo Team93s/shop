@@ -4,40 +4,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>会员登录</title>
-<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
-<script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
-<script src="js/bootstrap.min.js" type="text/javascript"></script>
-<!-- 引入自定义css文件 style.css -->
-<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>会员登录</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+	<script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+	<script src="js/bootstrap.min.js" type="text/javascript"></script>
+	<!-- 引入自定义css文件 style.css -->
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
 
-<style>
-body {
-	margin-top: 20px;
-	margin: 0 auto;
-	width: 100%;
-}
+	<style>
+		body {
+			margin-top: 20px;
+			margin: 0 auto;
+			width: 100%;
+		}
 
-.carousel-inner .item img {
-	width: 100%;
-	height: 300px;
-}
-</style>
+		.carousel-inner .item img {
+			width: 100%;
+			height: 300px;
+		}
+	</style>
 </head>
 
 <body>
-
-
 	<!-- 引入header.jsp -->
 	<jsp:include page="/header.jsp"></jsp:include>
-
 
 	<div class="row" style="width: 1210px; margin: 0 auto;">
 		<div class="col-md-12">
 			<ol class="breadcrumb">
-				<a href="${path}/product?method=index">首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
-				${cname}
+				<a href="${path}/product?method=index">首页</a>
+				<c:if test="${cname ne null}">
+					&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+					${cname}
+				</c:if>
 			</ol>
 		</div>
 
@@ -57,24 +57,65 @@ body {
 
 	</div>
 
+	<%-- 指定的商品类别中，未查询到商品信息 --%>
+	<c:if test="${vo.list.size() eq 0}">
+		<div style="width: 380px; margin: 0 auto; margin-top: 10px;margin-bottom: 10px;">
+			<img src="images/cart-empty.png" />
+		</div>
+	</c:if>
+
 	<!--分页 -->
-	<div style="width: 380px; margin: 0 auto; margin-top: 50px;">
-		<ul class="pagination" style="text-align: center; margin-top: 10px;">
-			<li class="disabled"><a href="#" aria-label="Previous"><span
-					aria-hidden="true">&laquo;</span></a></li>
-			<li class="active"><a href="#">1</a></li>
-			<li><a href="#">2</a></li>
-			<li><a href="#">3</a></li>
-			<li><a href="#">4</a></li>
-			<li><a href="#">5</a></li>
-			<li><a href="#">6</a></li>
-			<li><a href="#">7</a></li>
-			<li><a href="#">8</a></li>
-			<li><a href="#">9</a></li>
-			<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-			</a></li>
-		</ul>
-	</div>
+	<c:if test="${vo.list.size() ne 0}">
+		<div style="width: 380px; margin: 0 auto; margin-top: 50px;">
+			<ul class="pagination" style="text-align: center; margin-top: 10px;">
+
+				<%-- 不允许点击上一页的情况，已经在第一页  --%>
+				<c:if test="${vo.pageNow eq 1}">
+					<li class="disabled">
+						<a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+					</li>
+				</c:if>
+
+				<%-- 允许点击上一页的情况  --%>
+				<c:if test="${vo.pageNow ne 1}">
+					<li>
+						<a href="${path}/product?method=findProducts&cid=${vo.query1}&pname=${vo.query2}&pageNow=${vo.pageNow-1}"
+						   aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+					</li>
+				</c:if>
+
+
+				<%--  循环展示页码 --%>
+				<c:forEach begin="1" end="${vo.myPages}" var="page">
+
+					<c:if test="${page eq vo.pageNow}">
+						<li class="active"><a href="JavaScript:void(0)">${page}</a></li>
+					</c:if>
+
+					<c:if test="${page ne vo.pageNow}">
+						<li><a href="${path}/product?method=findProducts&cid=${vo.query1}&pname=${vo.query2}&pageNow=${page}">${page}</a></li>
+					</c:if>
+
+				</c:forEach>
+
+				<%-- 允许点击下一页 --%>
+				<c:if test="${vo.pageNow ne vo.myPages}">
+					<li>
+						<a href="${path}/product?method=findProducts&cid=${vo.query1}&pname=${vo.query2}&pageNow=${vo.pageNow+1}"
+						   aria-label="Next"> <span aria-hidden="true">&raquo;</span></a>
+					</li>
+				</c:if>
+
+				<%-- 不允许点击下一页，已经在最后一页 --%>
+				<c:if test="${vo.pageNow eq vo.myPages}">
+					<li class="disabled">
+						<a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span></a>
+					</li>
+				</c:if>
+
+			</ul>
+		</div>
+	</c:if>
 	<!-- 分页结束 -->
 
 	<!--商品浏览记录-->

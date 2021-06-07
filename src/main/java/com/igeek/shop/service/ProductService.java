@@ -59,10 +59,10 @@ public class ProductService {
             int myCounts = dao.selectValue(cid,pname).intValue();
 
             //计算总页数
-            int myPages = (int)(myCounts%18==0?myCounts/18:Math.ceil(myCounts/18.0));
+            int myPages = (int)(myCounts%12==0?myCounts/12:Math.ceil(myCounts/12.0));
 
             //计算每页起始值
-            int begin = (pageNow-1)*18;
+            int begin = (pageNow-1)*12;
 
             //查询记录列表
             List<Product> list = dao.selectAll(cid,pname,begin);

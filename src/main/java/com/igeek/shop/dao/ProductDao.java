@@ -35,14 +35,18 @@ public class ProductDao extends BasicDao<Product> implements IDao<Product> {
         if(cid==null || cid.equals("")){
             sql ="select pid , pname , pimage , shop_price , cid " +
                     "from product " +
-                    "where pname like concat('%',?,'%') limit ?,18";
+                    "where pname like concat('%',?,'%') limit ?,12";
+            List<Product> list = this.getBeanList(DataSourceUtils.getConnection(), sql, Product.class,
+                    params[1],params[2]);
+            return list;
         }else if(cid!=null || !cid.equals("")){
             sql ="select pid , pname , pimage , shop_price , cid " +
                     "from product " +
-                    "where cid = ? and pname like concat('%',?,'%') limit ?,18";
+                    "where cid = ? and pname like concat('%',?,'%') limit ?,12";
+            List<Product> list = this.getBeanList(DataSourceUtils.getConnection(), sql, Product.class, params);
+            return list;
         }
-        List<Product> list = this.getBeanList(DataSourceUtils.getConnection(), sql, Product.class, params);
-        return list;
+       return null;
     }
 
     //查询商品列表的总记录数
@@ -52,16 +56,19 @@ public class ProductDao extends BasicDao<Product> implements IDao<Product> {
         Object cid = params[0];
         String sql = "";
         if(cid==null || cid.equals("")){
-            sql ="select count(*)" +
+            sql ="select count(*) " +
                     "from product " +
                     "where pname like concat('%',?,'%')";
+            Long value = (Long)this.getSingleValue(DataSourceUtils.getConnection(), sql, params[1]);
+            return value;
         }else if(cid!=null || !cid.equals("")){
             sql = "select count(*) " +
                     "from product " +
                     "where cid = ? and pname like concat('%',?,'%')";
+            Long value = (Long)this.getSingleValue(DataSourceUtils.getConnection(), sql, params);
+            return value;
         }
-        Long value = (Long)this.getSingleValue(DataSourceUtils.getConnection(), sql, params);
-        return value;
+        return 0L;
     }
 
     @Override
