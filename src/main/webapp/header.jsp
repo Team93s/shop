@@ -42,7 +42,13 @@
 				<ul class="nav navbar-nav" id="categories"></ul>
 				<form class="navbar-form navbar-right" role="search" action="${path}/product?method=findProducts&cid=${vo.query1}" method="post">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search" id="pname" name="pname" value="${vo.query2}">
+						<c:if test="${vo ne null}">
+							<input type="text" class="form-control" placeholder="Search" id="pname" name="pname" value="${vo.query2}">
+						</c:if>
+
+						<c:if test="${vo eq null}">
+							<input type="text" class="form-control" placeholder="Search" id="pname" name="pname" value="${pname}">
+						</c:if>
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
 				</form>

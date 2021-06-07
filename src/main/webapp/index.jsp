@@ -76,10 +76,14 @@
 
 					<c:forEach items="${hotProducts}" var="product">
 						<div class="col-md-2" style="text-align:center;height:200px;padding:10px 0px;">
-							<a href="product_info.jsp">
+							<a href="${path}/product?method=findProductByPid&pid=${product.pid}">
 								<img src="${product.pimage}" width="130" height="130" style="display: inline-block;">
 							</a>
-							<p><a href="product_info.jsp" style='color:#666'>${product.pname}</a></p>
+							<p>
+								<a href="${path}/product?method=findProductByPid&pid=${product.pid}" style='color:#666'>
+									${product.pname}
+								</a>
+							</p>
 							<p><font color="#E4393C" style="font-size:16px">&yen;${product.shop_price}</font></p>
 						</div>
 					</c:forEach>
@@ -109,10 +113,10 @@
 
 					<c:forEach items="${newProducts}" var="product">
 						<div class="col-md-2" style="text-align:center;height:200px;padding:10px 0px;">
-							<a href="product_info.jsp">
+							<a href="${path}/product?method=findProductByPid&pid=${product.pid}">
 								<img src="${product.pimage}" width="130" height="130" style="display: inline-block;">
 							</a>
-							<p><a href="product_info.jsp" style='color:#666'>${product.pname}</a></p>
+							<p><a href="${path}/product?method=findProductByPid&pid=${product.pid}" style='color:#666'>${product.pname}</a></p>
 							<p><font color="#E4393C" style="font-size:16px">&yen;${product.shop_price}</font></p>
 						</div>
 					</c:forEach>

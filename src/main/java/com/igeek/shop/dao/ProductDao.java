@@ -73,7 +73,9 @@ public class ProductDao extends BasicDao<Product> implements IDao<Product> {
 
     @Override
     public Product selectOne(Object... params) throws Exception {
-        return null;
+        String sql = "select pid , pname , pimage , shop_price , cid , market_price from product where pid = ?";
+        Product product = this.getBean(DataSourceUtils.getConnection(), sql, Product.class, params);
+        return product;
     }
 
     @Override
