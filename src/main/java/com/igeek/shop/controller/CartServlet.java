@@ -72,4 +72,39 @@ public class CartServlet extends BasicServlet {
         response.sendRedirect("cart.jsp");
     }
 
+
+    //删除购物项
+    public void delCart(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        //1.获取请求参数中商品编号
+        String pid = request.getParameter("pid");
+
+        //2.从会话中获取购物车Cart的信息
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        //3.获取Cart中的Map<String,CartItem>信息
+        Map<String, CartItem> cartMap = cart.getMap();
+
+        //4.重新计算购物车的总金额 = 原购物车的总金额 - 删除购物项的小计
+        CartItem cartItem = cartMap.get(pid);
+        cart.setTotal(cart.getTotal() - cartItem.getSubTotal());
+
+        //5.移除当前商品的购物项
+        cartMap.remove(pid);
+
+        //6.将操作完成的Cart信息，返回至会话中
+        cart.setMap(cartMap);
+        session.setAttribute("cart",cart);
+
+        //7.响应重定向至cart.jsp
+        response.sendRedirect("cart.jsp");
+    }
+
+
+    //清空购物车
+    public void clearCart(HttpServletRequest request , HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        session.removeAttribute("cart");
+        response.sendRedirect("cart.jsp");
+    }
 }

@@ -36,19 +36,21 @@
 		<!-- 引入header.jsp -->
 		<jsp:include page="/header.jsp"></jsp:include>
 
-		<div class="container">
+
+        <c:if test="${empty cart.map}">
+            <div style="width:380px;margin:auto;">
+                <img src="images/cart-empty.png" />
+            </div>
+        </c:if>
+
+
+        <c:if test="${!empty cart.map}">
+		    <div class="container">
 			<div class="row">
 
-				<div style="margin:0 auto; margin-top:10px;width:950px;">
+                <div style="margin:0 auto; margin-top:10px;width:950px;">
 					<strong style="font-size:16px;margin:5px 0;">购物车详情</strong>
 
-                    <c:if test="${empty cart.map}">
-                        <div style="margin-top: 30px;margin: auto;">
-                            <img src="images/cart-empty.png" />
-                        </div>
-                    </c:if>
-
-                    <c:if test="${!empty cart.map}">
                         <table class="table table-bordered">
                             <tbody>
                             <tr class="warning">
@@ -80,14 +82,13 @@
                                         <span class="subtotal">￥${entry.value.subTotal}</span>
                                     </td>
                                     <td>
-                                        <a href="javascript:;" class="delete">删除</a>
+                                        <a href="${path}/cart?method=delCart&pid=${entry.key}" class="delete">删除</a>
                                     </td>
                                 </tr>
                             </c:forEach>
 
                             </tbody>
                         </table>
-                    </c:if>
 
 				</div>
 			</div>
@@ -95,12 +96,12 @@
 			<div style="margin-right:130px;">
 				<div style="text-align:right;">
 					<em style="color:#ff6600;">
-				登录后确认是否享有优惠&nbsp;&nbsp;
+				        登录后确认是否享有优惠&nbsp;&nbsp;
 					</em> 赠送积分: <em style="color:#ff6600;"><fmt:formatNumber value="${cart.total}" maxFractionDigits="0" /></em>&nbsp;
 					商品金额: <strong style="color:#ff6600;">￥${cart.total}元</strong>
 				</div>
 				<div style="text-align:right;margin-top:10px;margin-bottom:10px;">
-					<a href="order_info.jsp" id="clear" class="clear">清空购物车</a>
+					<a href="${path}/cart?method=clearCart" id="clear" class="clear">清空购物车</a>
 					<a href="order_info.jsp">
 						<input type="submit" width="100" value="提交订单" name="submit" border="0" style="background: url('./images/register.gif') no-repeat scroll 0 0 rgba(0, 0, 0, 0);
 						height:35px;width:100px;color:white;">
@@ -109,6 +110,7 @@
 			</div>
 
 		</div>
+        </c:if>
 
 		<!-- 引入footer.jsp -->
 		<jsp:include page="/footer.jsp"></jsp:include>
