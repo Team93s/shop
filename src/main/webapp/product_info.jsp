@@ -75,9 +75,14 @@ body {
 						</div>
 
 						<div style="margin: 20px 0 10px 0;; text-align: center;">
-							<a href="cart.jsp">
-								<input style="background: url('./images/product.gif') no-repeat scroll 0 -600px rgba(0, 0, 0, 0); height: 36px; width: 127px;" value="加入购物车" type="button">
-							</a> &nbsp;收藏商品
+							<input style="background: url('./images/product.gif') no-repeat scroll 0 -600px rgba(0, 0, 0, 0); height: 36px; width: 127px;" value="加入购物车" type="button" onclick="addCart()">
+							<script>
+								function addCart() {
+									console.log("111")
+									var buyNum = $("#quantity").val();
+									window.location.href="${path}/cart?method=addCart&pid=${product.pid}&buyNum="+buyNum;
+								}
+							</script> &nbsp;收藏商品
 						</div>
 					</div>
 				</div>
