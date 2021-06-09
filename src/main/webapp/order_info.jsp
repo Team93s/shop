@@ -47,12 +47,12 @@ body {
 						<c:forEach items="${sessionScope.orders.list}" var="item">
 							<tr class="active">
 								<td width="60" width="40%">
-									<input type="hidden" name="id" value="${item.itemId}">
+									<input type="hidden" name="id" value="${item.itemid}">
 									<img src="${item.product.pimage}" width="70" height="60"></td>
 								<td width="30%"><a target="_blank">${item.product.pname}</a></td>
 								<td width="20%">￥${item.product.shop_price}</td>
 								<td width="10%">${item.count}</td>
-								<td width="15%"><span class="subtotal">￥${item.subTotal}</span></td>
+								<td width="15%"><span class="subtotal">￥${item.subtotal}</span></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -67,7 +67,7 @@ body {
 
 		<div>
 			<hr />
-			<form class="form-horizontal" style="margin-top: 5px; margin-left: 150px;">
+			<form class="form-horizontal" style="margin-top: 5px; margin-left: 150px;" id="orderForm" method="post" action="/orders?method=confirmOrders">
 				<div class="form-group">
 					<label for="address" class="col-sm-1 control-label">地址</label>
 					<div class="col-sm-5">
@@ -89,42 +89,46 @@ body {
 							placeholder="请输入联系方式" value="${sessionScope.user.telephone}">
 					</div>
 				</div>
-			</form>
+
 
 			<hr />
 
 			<div style="margin-top: 5px; margin-left: 150px;">
 				<strong>选择银行：</strong>
 				<p>
-					<br /> <input type="radio" name="pd_FrpId" value="ICBC-NET-B2C"
-						checked="checked" />工商银行 <img src="./bank_img/icbc.bmp"
-						align="middle" />&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"
-						name="pd_FrpId" value="BOC-NET-B2C" />中国银行 <img
-						src="./bank_img/bc.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" name="pd_FrpId" value="ABC-NET-B2C" />农业银行 <img
-						src="./bank_img/abc.bmp" align="middle" /> <br /> <br /> <input
-						type="radio" name="pd_FrpId" value="BOCO-NET-B2C" />交通银行 <img
-						src="./bank_img/bcc.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" name="pd_FrpId" value="PINGANBANK-NET" />平安银行
-					<img src="./bank_img/pingan.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" name="pd_FrpId" value="CCB-NET-B2C" />建设银行 <img
-						src="./bank_img/ccb.bmp" align="middle" /> <br /> <br /> <input
-						type="radio" name="pd_FrpId" value="CEB-NET-B2C" />光大银行 <img
-						src="./bank_img/guangda.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="radio" name="pd_FrpId" value="CMBCHINA-NET-B2C" />招商银行
-					<img src="./bank_img/cmb.bmp" align="middle" />
-
+					<br />
+					<input type="radio" name="pd_FrpId" value="ICBC-NET-B2C" checked="checked" />
+					工商银行 <img src="./bank_img/icbc.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="pd_FrpId" value="BOC-NET-B2C" />
+					中国银行 <img src="./bank_img/bc.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="pd_FrpId" value="ABC-NET-B2C" />
+					农业银行 <img src="./bank_img/abc.bmp" align="middle" /> <br /> <br />
+					<input type="radio" name="pd_FrpId" value="BOCO-NET-B2C" />
+					交通银行 <img src="./bank_img/bcc.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="pd_FrpId" value="PINGANBANK-NET" />
+					平安银行 <img src="./bank_img/pingan.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="pd_FrpId" value="CCB-NET-B2C" />
+					建设银行 <img src="./bank_img/ccb.bmp" align="middle" /> <br /> <br />
+					<input type="radio" name="pd_FrpId" value="CEB-NET-B2C" />
+					光大银行 <img src="./bank_img/guangda.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="pd_FrpId" value="CMBCHINA-NET-B2C" />
+					招商银行 <img src="./bank_img/cmb.bmp" align="middle" />&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="pd_FrpId" value="alipay"  />
+					支付宝 <img src="img/alipay.jpg" align="middle" width="154px" height="33px" />
 				</p>
 				<hr />
 				<p style="text-align: right; margin-right: 100px;">
+					<%--<input type="submit" class="btn btn-warning">--%>
 					<a href="javascript:document.getElementById('orderForm').submit();">
-						<img src="./images/finalbutton.gif" width="204" height="51"
-						border="0" />
+						<img src="./images/finalbutton.gif" width="204" height="51" border="0" />
 					</a>
+					<font color="red">${msg}</font>
 				</p>
 				<hr />
 
 			</div>
+
+			</form>
 		</div>
 
 	</div>

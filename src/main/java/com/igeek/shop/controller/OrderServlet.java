@@ -3,6 +3,8 @@ package com.igeek.shop.controller;
 import com.igeek.common.utils.CommonUtils;
 import com.igeek.shop.entity.*;
 import com.igeek.shop.service.OrderService;
+import com.igeek.shop.vo.PageVO;
+import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,7 +65,7 @@ public class OrderServlet extends BasicServlet {
             //设置购买数量
             orderItem.setCount(entry.getValue().getBuyNum());
             //设置小计
-            orderItem.setSubTotal(entry.getValue().getSubTotal());
+            orderItem.setSubtotal(entry.getValue().getSubTotal());
             //设置所属订单
             orderItem.setOrders(orders);
 
@@ -85,5 +89,85 @@ public class OrderServlet extends BasicServlet {
     }
 
     //确认订单（支付）
+    public void confirmOrders(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        //获得请求参数
+        Map<String, String[]> map = request.getParameterMap();
 
+        //获取会话中的Orders信息
+        HttpSession session = request.getSession();
+        Orders orders = (Orders) session.getAttribute("orders");
+
+        try {
+            //更新订单Orders中的收货人信息
+            BeanUtils.populate(orders,map);
+            boolean flag = orderService.updateUserOrders(orders);
+
+            //跳转
+            if(flag){
+                //更新成功
+                String type = request.getParameter("pd_FrpId");
+                if("alipay".equals(type)){
+                    //支付宝支付 ，调用支付接口
+                    response.sendRedirect("alipay.trade.page.pay.jsp");
+                }
+            }else{
+                //更新失败
+                request.setAttribute("msg","更新收货人信息失败");
+                request.getRequestDispatcher("order_info.jsp").forward(request,response);
+            }
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //查看我的订单
+    public void viewMyOrders(HttpServletRequest request , HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        //获取会话中登陆者的信息
+        User user = (User)session.getAttribute("user");
+
+        //获取请求参数中的当前页码
+        String page = request.getParameter("pageNow");
+
+        //查询当前登录者的订单
+        PageVO<Orders> vo = orderService.viewOrders(user.getUid(), page);
+
+        //通过订单编号，获取订单明细及其商品信息
+        List<Orders> ordersList = vo.getList();
+        for (Orders orders : ordersList) {
+            //获取订单编号
+            String oid = orders.getOid();
+            //通过订单编号查询，返回订单明细及其商品信息
+            List<Map<String, Object>> mapList = orderService.findItemsAndProduct(oid);
+            for (Map<String, Object> map : mapList) {  //Map中的entry  key-->表中的字段名  value-->表中字段对应的值
+                //封装Product商品对象
+                Product product =  new Product();
+                //封装OrderItem订单明细对象
+                OrderItem orderItem = new OrderItem();
+                try {
+                    //直接装配上属性值
+                    BeanUtils.populate(product,map);
+                    BeanUtils.populate(orderItem,map);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                //将Product商品信息，设置进OrderItem订单明细信息中
+                orderItem.setProduct(product);
+                //将orders订单信息，设置进OrderItem订单明细信息中
+                orderItem.setOrders(orders);
+
+                //将OrderItem订单明细信息，设置进orders订单中
+                orders.getList().add(orderItem);
+            }
+        }
+
+        request.setAttribute("vo",vo);  //仅仅只有订单表数据，而并没有订单明细（也没有商品数据）
+        request.getRequestDispatcher("order_list.jsp").forward(request,response);
+    }
 }

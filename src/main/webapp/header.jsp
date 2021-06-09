@@ -17,7 +17,7 @@
 				<li><a href="login.jsp">登录</a></li>
 				<li><a href="register.jsp">注册</a></li>
 				<li><a href="cart.jsp">购物车</a></li>
-				<li><a href="">联系客服</a></li>
+				<li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3168850469&site=qq&menu=yes">联系客服</a></li>
 			</ol>
 		</c:if>
 
@@ -26,8 +26,10 @@
 			<ol class="list-inline">
 				<li>欢迎,<a href="/user?method=logout">${sessionScope.user.username}</a></li>
 				<li><a href="cart.jsp">购物车</a></li>
-				<li><a href="order_list.jsp">我的订单</a></li>
-				<li><a href="">联系客服</a></li>
+				<li><a href="/orders?method=viewMyOrders">我的订单</a></li>
+				<li>
+					<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3168850469&site=qq&menu=yes">联系客服</a>
+				</li>
 			</ol>
 		</c:if>
 

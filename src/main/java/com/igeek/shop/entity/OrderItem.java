@@ -8,11 +8,11 @@ package com.igeek.shop.entity;
  */
 public class OrderItem {
     //明细编号
-    private String itemId;
+    private String itemid;
     //购买数量
     private int count;
     //小计
-    private double subTotal;
+    private double subtotal;
 
     //商品信息  一条订单明细只能有一个商品
     private Product product;
@@ -24,28 +24,28 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(String itemId, int count, double subTotal, Product product, Orders orders) {
-        this.itemId = itemId;
+    public OrderItem(String itemid, int count, double subtotal, Product product, Orders orders) {
+        this.itemid = itemid;
         this.count = count;
-        this.subTotal = subTotal;
+        this.subtotal = subtotal;
         this.product = product;
         this.orders = orders;
     }
 
     /**
      * 获取
-     * @return itemId
+     * @return itemid
      */
-    public String getItemId() {
-        return itemId;
+    public String getItemid() {
+        return itemid;
     }
 
     /**
      * 设置
-     * @param itemId
+     * @param itemid
      */
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setItemid(String itemid) {
+        this.itemid = itemid;
     }
 
     /**
@@ -66,18 +66,18 @@ public class OrderItem {
 
     /**
      * 获取
-     * @return subTotal
+     * @return subtotal
      */
-    public double getSubTotal() {
-        return subTotal;
+    public double getSubtotal() {
+        return subtotal;
     }
 
     /**
      * 设置
-     * @param subTotal
+     * @param subtotal
      */
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 
     /**
@@ -113,6 +113,6 @@ public class OrderItem {
     }
 
     public String toString() {
-        return "OrderItem{itemId = " + itemId + ", count = " + count + ", subTotal = " + subTotal + ", product = " + product + ", orders = " + orders + "}";
+        return "OrderItem{itemid = " + itemid + ", count = " + count + ", subtotal = " + subtotal + ", product = " + product + ", orders = " + orders + "}";
     }
 }
