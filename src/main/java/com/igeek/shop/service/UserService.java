@@ -59,9 +59,32 @@ public class UserService {
             value = (Long)dao.selectValue(name);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                DataSourceUtils.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         //若记录数>0，则查到，true，代表不可用
         //若记录数=0，则未查到，false，代表可用
         return value>0?true:false;
+    }
+
+    //登录
+    public User login(String name,String pwd){
+        try {
+            User user = dao.selectOne(name, pwd);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                DataSourceUtils.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

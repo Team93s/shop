@@ -11,13 +11,26 @@
 		<img src="img/header.png" />
 	</div>
 	<div class="col-md-3" style="padding-top:20px">
-		<ol class="list-inline">
-			<li><a href="login.jsp">登录</a></li>
-			<li><a href="register.jsp">注册</a></li>
-			<li><a href="cart.jsp">购物车</a></li>
-			<li><a href="order_list.jsp">我的订单</a></li>
-			<li><a href="">联系客服</a></li>
-		</ol>
+
+		<c:if test="${sessionScope.user==null}">
+			<ol class="list-inline">
+				<li><a href="login.jsp">登录</a></li>
+				<li><a href="register.jsp">注册</a></li>
+				<li><a href="cart.jsp">购物车</a></li>
+				<li><a href="">联系客服</a></li>
+			</ol>
+		</c:if>
+
+
+		<c:if test="${sessionScope.user!=null}">
+			<ol class="list-inline">
+				<li>欢迎,<a href="/user?method=logout">${sessionScope.user.username}</a></li>
+				<li><a href="cart.jsp">购物车</a></li>
+				<li><a href="order_list.jsp">我的订单</a></li>
+				<li><a href="">联系客服</a></li>
+			</ol>
+		</c:if>
+
 	</div>
 </div>
 

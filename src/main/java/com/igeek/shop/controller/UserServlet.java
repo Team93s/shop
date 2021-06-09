@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -127,8 +128,37 @@ public class UserServlet extends BasicServlet {
         out.close();
     }
 
+    //登录
     public void login(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
+        String name = request.getParameter("name");
+        String pwd = MD5Utils.md5(request.getParameter("pwd"));
 
+        User user = userService.login(name, pwd);
+        if(user!=null){
+            int state = user.getState();
+            switch (state){
+                case 0:
+                    //未激活
+                    request.setAttribute("msg","当前账户未激活，请尽快前往邮箱激活账户");
+                    request.getRequestDispatcher("login.jsp").forward(request,response);
+                    break;
+                case 1:
+                    //已激活
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user",user);
+                    request.getRequestDispatcher("home.jsp").forward(request,response);
+                    break;
+            }
+        }else{
+            request.setAttribute("msg","当前账户和密码不匹配");
+            request.getRequestDispatcher("login.jsp").forward(request,response);
+        }
     }
 
+    //登出
+    public void logout(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
+        HttpSession session = request.getSession();
+        session.invalidate();
+        response.sendRedirect("home.jsp");
+    }
 }

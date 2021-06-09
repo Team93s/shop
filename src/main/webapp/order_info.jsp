@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -34,7 +35,7 @@ body {
 				<table class="table table-bordered">
 					<tbody>
 						<tr class="warning">
-							<th colspan="5">订单编号:9005</th>
+							<th colspan="5">订单编号:${sessionScope.orders.oid}</th>
 						</tr>
 						<tr class="warning">
 							<th>图片</th>
@@ -43,48 +44,49 @@ body {
 							<th>数量</th>
 							<th>小计</th>
 						</tr>
-						<tr class="active">
-							<td width="60" width="40%"><input type="hidden" name="id"
-								value="22"> <img src="./image/dadonggua.jpg" width="70"
-								height="60"></td>
-							<td width="30%"><a target="_blank"> 有机蔬菜 大冬瓜...</a></td>
-							<td width="20%">￥298.00</td>
-							<td width="10%">5</td>
-							<td width="15%"><span class="subtotal">￥596.00</span></td>
-						</tr>
+						<c:forEach items="${sessionScope.orders.list}" var="item">
+							<tr class="active">
+								<td width="60" width="40%">
+									<input type="hidden" name="id" value="${item.itemId}">
+									<img src="${item.product.pimage}" width="70" height="60"></td>
+								<td width="30%"><a target="_blank">${item.product.pname}</a></td>
+								<td width="20%">￥${item.product.shop_price}</td>
+								<td width="10%">${item.count}</td>
+								<td width="15%"><span class="subtotal">￥${item.subTotal}</span></td>
+							</tr>
+						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 
 			<div style="text-align: right; margin-right: 120px;">
-				商品金额: <strong style="color: #ff6600;">￥596.00元</strong>
+				商品金额: <strong style="color: #ff6600;">￥${sessionScope.orders.total}元</strong>
 			</div>
 
 		</div>
 
 		<div>
 			<hr />
-			<form class="form-horizontal"
-				style="margin-top: 5px; margin-left: 150px;">
+			<form class="form-horizontal" style="margin-top: 5px; margin-left: 150px;">
 				<div class="form-group">
-					<label for="username" class="col-sm-1 control-label">地址</label>
+					<label for="address" class="col-sm-1 control-label">地址</label>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" id="username"
-							placeholder="请输入收货地址">
+						<input type="text" class="form-control" id="address" name="address"
+							placeholder="请输入收货地址" value="${sessionScope.user.address}">
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-1 control-label">收货人</label>
+					<label for="name" class="col-sm-1 control-label">姓名</label>
 					<div class="col-sm-5">
-						<input type="password" class="form-control" id="inputPassword3"
-							placeholder="请输收货人">
+						<input type="text" class="form-control" id="name" name="name"
+							placeholder="请输收货人姓名" value="${sessionScope.user.name}">
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="confirmpwd" class="col-sm-1 control-label">电话</label>
+					<label for="telephone" class="col-sm-1 control-label">电话</label>
 					<div class="col-sm-5">
-						<input type="password" class="form-control" id="confirmpwd"
-							placeholder="请输入联系方式">
+						<input type="text" class="form-control" id="telephone" name="telephone"
+							placeholder="请输入联系方式" value="${sessionScope.user.telephone}">
 					</div>
 				</div>
 			</form>
