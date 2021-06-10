@@ -112,7 +112,4 @@ public class OrderItem {
         this.orders = orders;
     }
 
-    public String toString() {
-        return "OrderItem{itemid = " + itemid + ", count = " + count + ", subtotal = " + subtotal + ", product = " + product + ", orders = " + orders + "}";
-    }
 }

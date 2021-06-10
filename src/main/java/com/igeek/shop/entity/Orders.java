@@ -193,7 +193,4 @@ public class Orders {
         this.list = list;
     }
 
-    public String toString() {
-        return "Orders{oid = " + oid + ", ordertime = " + ordertime + ", total = " + total + ", state = " + state + ", address = " + address + ", name = " + name + ", telephone = " + telephone + ", user = " + user + ", list = " + list + "}";
-    }
 }
