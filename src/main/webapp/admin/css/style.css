@@ -1,0 +1,15 @@
+.navbar {
+    background-color: #4f9fcf !important;
+}
+.navbar a{
+    color: white !important;
+    font-weight: bolder;
+ }
+.navbar li.active a{
+    color: #4f9fcf !important;
+    font-weight: bolder;
+}
+
+.container .row{
+    margin-bottom: 40px !important;
+}
