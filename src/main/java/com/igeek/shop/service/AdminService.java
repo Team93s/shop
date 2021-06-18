@@ -44,7 +44,7 @@ public class AdminService {
     }
 
     //分页查询
-    public PageVO findAll(String query , int pageNow){
+    public PageVO findAll(String code , String query , int pageNow){
         PageVO vo = new PageVO();
 
         //给当前页传值
@@ -53,7 +53,7 @@ public class AdminService {
         //查询总记录数
         int myCounts = 0;
         try {
-            myCounts = dao.selectCounts(query);
+            myCounts = dao.selectCounts(code , query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,7 +66,7 @@ public class AdminService {
         int begin =  (pageNow - 1)*5;
         List<? extends Object> list = null;
         try {
-            list = dao.selectAll(query, begin);
+            list = dao.selectAll(code , query, begin);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -139,5 +139,15 @@ public class AdminService {
             }
         }
         return null;
+    }
+
+    //添加商品类别
+    public boolean add(Category category){
+        try {
+            return dao.insert(category)>0?true:false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

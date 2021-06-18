@@ -122,6 +122,14 @@
       <version>3.17</version>
     </dependency>
 
+    <!-- 导入jedis的包 -->
+    <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>3.3.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>

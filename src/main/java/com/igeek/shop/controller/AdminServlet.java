@@ -3,6 +3,7 @@ package com.igeek.shop.controller;
 import com.google.gson.Gson;
 import com.igeek.common.utils.CommonUtils;
 import com.igeek.common.utils.ExcelUtil;
+import com.igeek.common.utils.JedisPoolUtils;
 import com.igeek.shop.entity.*;
 import com.igeek.shop.service.AdminService;
 import com.igeek.shop.vo.HomeVO;
@@ -65,6 +66,7 @@ public class AdminServlet extends BasicServlet {
     public void findAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = request.getParameter("pageNow");
         String query = request.getParameter("query");
+        String code = request.getParameter("code");
 
         int pageNow = 1;
         if(page!=null){
@@ -74,13 +76,19 @@ public class AdminServlet extends BasicServlet {
             query = "";
         }
 
-        PageVO vo = service.findAll(query, pageNow);
+        PageVO vo = service.findAll(code, query, pageNow);
 
         request.setAttribute("vo", vo);
         request.setAttribute("query", query);
 
-        //若code是product时，跳转到商品管理界面
-        request.getRequestDispatcher(request.getContextPath()+"/admin/product/product.jsp").forward(request, response);
+        if(code.equals("product")){
+            //若code是product时，跳转到商品管理界面
+            request.getRequestDispatcher(request.getContextPath()+"/admin/product/product.jsp").forward(request, response);
+        }else if(code.equals("category")){
+            //若code是product时，跳转到商品管理界面
+            request.getRequestDispatcher(request.getContextPath()+"/admin/category/category.jsp").forward(request, response);
+        }
+
     }
 
     //通过商品编号查询商品信息
@@ -155,7 +163,12 @@ public class AdminServlet extends BasicServlet {
                 //上传图片，将其信息直接存储至Product对象中
                 String newName = CommonUtils.getUUID()+oldName.substring(oldName.lastIndexOf("."),oldName.length()-1);
                 product.setPimage("/temp/"+newName);
-                part.write("E:\\93\\5.JSP+Servlet\\temp\\"+newName);
+
+                //本机图片上传服务器路径
+                //part.write("E:\\93\\5.JSP+Servlet\\temp\\"+newName);
+
+                //Linux安装的tomcat上，设置服务器路径
+                part.write("/usr/local/upload/"+newName);
             }else{
                 //未上传图片，获取原图片信息，设置进Product对象中
                 List<Map<String, Object>> mapList = service.findOneById(request.getParameter("pid"));
@@ -185,7 +198,7 @@ public class AdminServlet extends BasicServlet {
         //sheet页的名字
         String sheetName = "商品详情";
         //数据
-        List<Product> goods = service.findAll("",1).getList();
+        List<Product> goods = service.findAll("product","",1).getList();
 
         HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title,prop, goods, null);
 
@@ -198,5 +211,26 @@ public class AdminServlet extends BasicServlet {
         wb.write(os);
         os.flush();
         os.close();
+    }
+
+    //添加商品类别
+    public void updateCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, InvocationTargetException, IllegalAccessException {
+        String code = request.getParameter("code");
+        if(code.equals("add")){
+            Category category = new Category();
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            BeanUtils.populate(category,parameterMap);
+            category.setCid(CommonUtils.getUUID().replaceAll("-",""));
+
+            //更新  -    执行添加商品类别的操作
+            boolean flag = service.add(category);
+            if(flag){
+                //清空redis缓存
+                JedisPoolUtils.getJedis().flushAll();
+
+                //跳转
+                response.sendRedirect(request.getContextPath()+"/admin?method=findAll&code=category");
+            }
+        }
     }
 }

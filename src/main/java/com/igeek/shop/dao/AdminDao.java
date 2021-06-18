@@ -27,20 +27,35 @@ public class AdminDao extends BasicDao{
     }
 
     //查询指定表的总记录数
-    public int selectCounts(String query) throws SQLException {
+    public int selectCounts(String code , String query) throws SQLException {
         QueryRunner runner = new QueryRunner();
-        String sql = "select count(*) from product where pname like concat('%',?,'%') and pflag=0 ";
+        String sql = "";
+        if(code.equals("product")){
+            sql = "select count(*) from product where pname like concat('%',?,'%') and pflag=0 ";
+        }else if(code.equals("category")){
+            sql = "select count(*) from category where cname like concat('%',?,'%')";
+        }
+
         int value = ((Long)this.getSingleValue(DataSourceUtils.getConnection(), sql, query)).intValue();
         return value;
     }
 
     //查询指定表中的数据
-    public List<? extends Object> selectAll(String query,int begin) throws SQLException {
-        String sql = "select * from product " +
-                "where pname like concat('%',?,'%') and pflag=0 " +
-                "order by pid+0 limit ?,5";
-        List<Product> productList = this.getBeanList(DataSourceUtils.getConnection() , sql , Product.class , query , begin);
-        return productList;
+    public List<? extends Object> selectAll(String code , String query,int begin) throws SQLException {
+        String sql = "";
+        List<Product> list = null;
+        if(code.equals("product")){
+            sql = "select * from product " +
+                    "where pname like concat('%',?,'%') and pflag=0 " +
+                    "order by pid+0 limit ?,5";
+            list = this.getBeanList(DataSourceUtils.getConnection() , sql , Product.class , query , begin);
+        }else if(code.equals("category")){
+            sql = "select * from category " +
+                    "where cname like concat('%',?,'%') " +
+                    "order by cid+0 limit ?,5";
+            list = this.getBeanList(DataSourceUtils.getConnection() , sql , Category.class , query , begin);
+        }
+        return list;
     }
 
     //通过商品编号查询商品信息
@@ -74,5 +89,12 @@ public class AdminDao extends BasicDao{
         String sql = "select * from category where cid = ?";
         Category category = (Category)this.getBean(DataSourceUtils.getConnection(),sql,Category.class,cid);
         return category;
+    }
+
+    //添加商品类别
+    public int insert(Category category) throws SQLException {
+        String sql = "insert into category values(?,?)";
+        int i = this.updateInfo(DataSourceUtils.getConnection(),sql,category.getCid(),category.getCname());
+        return i;
     }
 }
